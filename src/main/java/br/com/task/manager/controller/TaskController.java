@@ -2,7 +2,6 @@ package br.com.task.manager.controller;
 
 
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
-import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.model.Task;
 import br.com.task.manager.strategy.TaskSortingStrategy;
 

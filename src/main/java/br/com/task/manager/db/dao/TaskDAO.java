@@ -60,7 +60,10 @@ public class TaskDAO implements TaskProxyDAOInterface {
             stmt.setString(5, task.getPriority());
             stmt.setBoolean(6, task.isCompleted());
             stmt.setTimestamp(7, Timestamp.valueOf(task.getCreationDate()));
-            stmt.execute();
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Failed to insert task, no rows affected.");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -82,7 +85,6 @@ public class TaskDAO implements TaskProxyDAOInterface {
                 String priority = rs.getString("priority");
                 boolean completed = rs.getBoolean("completed");
                 LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
-
 
                 tasks.add(new Task(id, titulo, descricao, status, priority, completed, creationDate, usuarioId));
             }
