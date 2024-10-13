@@ -13,7 +13,6 @@ public class TaskDAO {
         this.connection = connection;
     }
 
-    // Insere uma nova tarefa no banco de dados
     public void insert(Task task) {
         String sql = "INSERT INTO tasks (title, description, status, user_id, priority, completed, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -22,16 +21,15 @@ public class TaskDAO {
             stmt.setString(2, task.getDescricao());
             stmt.setString(3, task.getStatus());
             stmt.setInt(4, task.getIdUsuario());
-            stmt.setString(5, task.getPriority()); // Adiciona o campo priority
-            stmt.setBoolean(6, task.isCompleted()); // Adiciona o campo completed
-            stmt.setTimestamp(7, Timestamp.valueOf(task.getCreationDate())); // Adiciona o campo creation_date
+            stmt.setString(5, task.getPriority());
+            stmt.setBoolean(6, task.isCompleted());
+            stmt.setTimestamp(7, Timestamp.valueOf(task.getCreationDate()));
             stmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    // Busca as tarefas de um determinado usuário
     public List<Task> getTasksByUsuario(int usuarioId) {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM tasks WHERE user_id = ?";
@@ -45,9 +43,9 @@ public class TaskDAO {
                 String titulo = rs.getString("title");
                 String descricao = rs.getString("description");
                 String status = rs.getString("status");
-                String priority = rs.getString("priority"); // Obtém o campo priority
-                boolean completed = rs.getBoolean("completed"); // Obtém o campo completed
-                LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime(); // Obtém o campo creation_date
+                String priority = rs.getString("priority");
+                boolean completed = rs.getBoolean("completed");
+                LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
 
 
                 tasks.add(new Task(id, titulo, descricao, status, priority, completed, creationDate, usuarioId));
