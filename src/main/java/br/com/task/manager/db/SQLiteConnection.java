@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
+
 public class SQLiteConnection {
 
     private static final String DATABASE_URL = "jdbc:sqlite:task-manager.db";
+    private static final Logger logger = Logger.getLogger(SQLiteConnection.class.getName());
     private static Connection connection;
 
     public static Connection connect() {
@@ -52,9 +55,9 @@ public class SQLiteConnection {
              Statement stmt = conn.createStatement()) {
             stmt.execute(createUsersTable);
             stmt.execute(createTasksTable);
-            System.out.println("Tabelas criadas ou já existem.");
+            logger.info("Tables created successfully");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }
