@@ -1,6 +1,6 @@
-package br.com.task.manager.proxy;
+package br.com.task.manager.db.proxy;
 
-import br.com.task.manager.db.TaskDAO;
+import br.com.task.manager.db.dao.TaskDAO;
 import br.com.task.manager.model.Task;
 
 import java.sql.Connection;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TasksProxy {
+public class TasksProxy implements TaskProxyDAOInterface {
     private TaskDAO taskDAO;
     private Map<Integer, Task> taskCache = new HashMap<>();
     private Map<Integer, List<Task>> taskCacheByUser = new HashMap<>();
@@ -17,37 +17,48 @@ public class TasksProxy {
         taskDAO = new TaskDAO(connection);
     }
 
-    public void insert(Task task) {
-        taskDAO.insert(task);
+    @Override
+    public void insertTask(Task task) {
+        taskDAO.insertTask(task);
         taskCache.put(task.getId(), task);
-        taskCacheByUser.put(task.getIdUsuario(), getTaksByUserId(task.getIdUsuario()));
+        taskCacheByUser.put(task.getIdUsuario(), getTasksByUserId(task.getIdUsuario()));
     }
 
-    public void update(Task task) {
+    @Override
+    public void updateTask(Task task) {
         taskDAO.updateTask(task);
         taskCache.put(task.getId(), task);
-        taskCacheByUser.put(task.getIdUsuario(), getTaksByUserId(task.getIdUsuario()));
+        taskCacheByUser.put(task.getIdUsuario(), getTasksByUserId(task.getIdUsuario()));
     }
 
-    public void delete(int id) {
+    @Override
+    public void deleteTaskById(int id) {
+        taskDAO.deleteTaskById(id);
+        taskCache.remove(id);
+    }
+
+    @Override
+    public void deleteTasksByUsuarioId(int id) {
         int userId = taskCache.get(id).getIdUsuario();
         taskCacheByUser.remove(userId);
         taskDAO.deleteTaskById(id);
         taskCache.remove(id);
     }
 
-    public List<Task> getTaksByUserId(int id) {
+    @Override
+    public List<Task> getTasksByUserId(int id) {
         if (taskCacheByUser.containsKey(id)) {
             return taskCacheByUser.get(id);
         }
 
-        List<Task> tasks = taskDAO.getTasksByUsuario(id);
+        List<Task> tasks = taskDAO.getTasksByUserId(id);
         if(tasks != null) {
             taskCacheByUser.put(id, tasks);
         }
         return taskCacheByUser.get(id);
     }
 
+    @Override
     public Task getTaskById(int id) {
         if (taskCache.containsKey(id)) {
             return taskCache.get(id);
