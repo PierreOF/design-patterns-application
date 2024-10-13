@@ -4,7 +4,9 @@ import br.com.task.manager.controller.TaskController;
 import br.com.task.manager.controller.UsuarioController;
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
+import br.com.task.manager.email.EmailService;
 import br.com.task.manager.model.Usuario;
+import br.com.task.manager.observer.TaskNotifier;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -14,11 +16,13 @@ public class UsuarioView {
     private final UsuarioController usuarioController;
     private final Scanner scanner;
     private final TaskProxyDAOInterface taskProxyDAO;
+    private final TaskNotifier taskNotifier;
 
-    public UsuarioView(Connection connection, TaskProxyDAOInterface taskProxyDAO, UsuarioProxyDAOInterface usuarioProxyDAO) {
-        this.usuarioController = new UsuarioController(connection);
+    public UsuarioView(Connection connection, TaskProxyDAOInterface taskProxyDAO, UsuarioProxyDAOInterface usuarioProxyDAO, TaskNotifier taskNotifier, EmailService emailService) {
+        this.usuarioController = new UsuarioController(connection, taskNotifier, emailService);
         this.scanner = new Scanner(System.in);
         this.taskProxyDAO = taskProxyDAO;
+        this.taskNotifier = taskNotifier;
     }
 
     public void menu() {
@@ -58,7 +62,7 @@ public class UsuarioView {
 
         if (usuario != null) {
             System.out.println("Login realizado com sucesso! Bem-vindo, " + usuario.getNome() + "!");
-            TaskController taskController = new TaskController(taskProxyDAO);
+            TaskController taskController = new TaskController(taskProxyDAO, taskNotifier);
             TaskView taskView = new TaskView(taskController, usuario.getId());
             taskView.menu();
         } else {
@@ -75,7 +79,7 @@ public class UsuarioView {
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
-        boolean sucesso = usuarioController.cadastrar(nome, email, senha);
+        boolean sucesso = usuarioController.register(nome, email, senha);
 
         if (sucesso) {
             System.out.println("Usuário cadastrado com sucesso!");
