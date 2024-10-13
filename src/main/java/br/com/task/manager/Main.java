@@ -1,9 +1,12 @@
 package br.com.task.manager;
 
-import br.com.task.manager.db.SQLiteConnection;
+import br.com.task.manager.db.dao.SQLiteConnection;
+import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
+import br.com.task.manager.db.proxy.TasksProxy;
+import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
+import br.com.task.manager.db.proxy.UsuarioProxy;
 import br.com.task.manager.model.Task;
 import br.com.task.manager.model.Usuario;
-import br.com.task.manager.proxy.UsuarioProxy;
 
 import java.sql.Connection;
 import java.util.List;
@@ -14,20 +17,65 @@ public class Main {
         SQLiteConnection.createTables();
 
         Connection conn = SQLiteConnection.connect();
-        UsuarioProxy proxy = new UsuarioProxy(conn);
+        UsuarioProxyDAOInterface usuarioProxy = new UsuarioProxy(conn);
+        TaskProxyDAOInterface taskProxy = new TasksProxy(conn);
 
-//        proxy.addUsuario(new Usuario("João", "Joao@gmail.com", "123"));
-//        proxy.addTask(new Task("Estudar Java", "Estudar Java", "pendente", 1, "alta"));
-//        proxy.addTask(new Task("Estudar Python", "Estudar Python", "pendente", 1, "alta"));
-//        proxy.addTask(new Task("Estudar JavaScript", "Estudar JavaScript", "pendente", 1, "alta"));
-//        Usuario usuario = proxy.getUsuarioById(1);
-//        System.out.println("Usuário: " + usuario.getNome());
 
-        List<Task> tasks = proxy.getTasksByUsuarioId(1);
-        for (Task t : tasks) {
-            System.out.println(t);
+        Usuario novoUsuario = new Usuario("Carlos Silva", "carlos@example.com", "senha123");
+        usuarioProxy.insertUser(novoUsuario);
+        System.out.println("Usuário inserido: " + usuarioProxy.getUsuarioById(1));
+
+
+        Usuario usuarioLogado = usuarioProxy.userLogin("carlos@example.com", "senha123");
+        if (usuarioLogado != null) {
+            System.out.println("Usuário logado: " + usuarioLogado);
+        } else {
+            System.out.println("Usuário não encontrado");
+        }
+
+
+        Usuario usuarioAtualizado = new Usuario(1, "Carlos Silva", "carlos@example.com", "novaSenha123");
+        usuarioProxy.updateUser(usuarioAtualizado);
+        System.out.println("Usuário atualizado: " + usuarioProxy.getUsuarioById(1));
+
+
+        Task novaTarefa = new Task("Comprar leite", "Comprar leite no supermercado", "Pendente", usuarioLogado.getId(), "Baixa");
+        taskProxy.insertTask(novaTarefa);
+        System.out.println("Tarefa inserida: " + novaTarefa.getTitulo());
+
+
+        List<Task> tarefas = taskProxy.getTasksByUserId(usuarioLogado.getId());
+        System.out.println("Tarefas para o usuário " + usuarioLogado.getNome() + ":");
+        for (Task tarefa : tarefas) {
+            System.out.println("- " + tarefa.getTitulo() + " (Status: " + tarefa.getStatus() + ")");
+        }
+
+
+        if (!tarefas.isEmpty()) {
+            Task tarefaParaAtualizar = tarefas.get(0);
+            tarefaParaAtualizar.setTitulo("Comprar leite e pão");
+            taskProxy.updateTask(tarefaParaAtualizar);
+            System.out.println("Tarefa atualizada: " + tarefaParaAtualizar.getTitulo());
+        }
+
+
+        if (!tarefas.isEmpty()) {
+            Task tarefaParaExcluir = tarefas.get(0);
+            taskProxy.deleteTaskById(tarefaParaExcluir.getId());
+            System.out.println("Tarefa excluída: " + tarefaParaExcluir.getTitulo());
+        }
+
+
+        usuarioProxy.deleteUser(usuarioLogado.getId());
+        System.out.println("Usuário excluído: " + usuarioLogado.getNome());
+
+
+        Usuario usuarioExcluido = usuarioProxy.getUsuarioById(usuarioLogado.getId());
+        if (usuarioExcluido == null) {
+            System.out.println("Usuário não encontrado (excluído com sucesso).");
         }
 
         SQLiteConnection.close();
+        SQLiteConnection.deleteDatabase();
     }
 }
