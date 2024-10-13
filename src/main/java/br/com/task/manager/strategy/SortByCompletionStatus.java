@@ -8,7 +8,7 @@ import java.util.List;
 public class SortByCompletionStatus implements TaskSortingStrategy {
     @Override
     public List<Task> sort(List<Task> tasks) {
-        tasks.sort(Comparator.comparing(Task::getStatus));
+//        tasks.sort(Comparator.comparing(Task::isCompleted));
         return tasks;
     }
 }
