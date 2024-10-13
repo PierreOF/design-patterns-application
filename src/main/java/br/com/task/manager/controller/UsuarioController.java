@@ -1,6 +1,7 @@
 package br.com.task.manager.controller;
 
 import br.com.task.manager.db.proxy.UsuarioProxy;
+import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.model.Usuario;
 
 import java.sql.Connection;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class UsuarioController {
 
-    private UsuarioProxy usuarioProxy;
+    private final UsuarioProxyDAOInterface usuarioProxy;
 
     public UsuarioController(Connection connection) {
         this.usuarioProxy = new UsuarioProxy(connection);

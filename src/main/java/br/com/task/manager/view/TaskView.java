@@ -102,7 +102,7 @@ public class TaskView {
             case 2:
                 return new SortByCreationDate();
             default:
-                System.out.println("Opção inválida. Usando a ordenação padrão por prioridade.");
+                System.out.println("Opção inválida. Usando a ordenação padrão por task cumprida.");
                 return new SortByCompletionStatus();
         }
     }
