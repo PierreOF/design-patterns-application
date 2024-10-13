@@ -5,7 +5,6 @@ import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.TasksProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.db.proxy.UsuarioProxy;
-import br.com.task.manager.model.Enum.TaskPriorityEnum;
 import br.com.task.manager.model.Task;
 import br.com.task.manager.model.Usuario;
 
@@ -21,8 +20,11 @@ public class Main {
         UsuarioProxyDAOInterface usuarioProxy = new UsuarioProxy(conn);
         TaskProxyDAOInterface taskProxy = new TasksProxy(conn);
 
+//        Usuario user = new Usuario("Carlos", "email","senha");
+//        usuarioProxy.insertUser(user);
 
-        Usuario usuarioLogado = usuarioProxy.userLogin("carlos@example.com", "senha123");
+
+        Usuario usuarioLogado = usuarioProxy.userLogin("email", "senha");
         if (usuarioLogado != null) {
             System.out.println("Usuário logado: " + usuarioLogado);
         } else {
