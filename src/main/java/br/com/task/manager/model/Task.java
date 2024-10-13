@@ -12,18 +12,16 @@ public class Task {
     private boolean completed;
     private final LocalDateTime creationDate;
 
-    // Construtor principal, usado para criar uma tarefa com base nos dados do usuário
     public Task(String titulo, String descricao, String status, int idUsuario, String priority) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
         this.idUsuario = idUsuario;
         this.priority = priority;
-        this.completed = false; // Por padrão, a tarefa começa como não concluída
-        this.creationDate = LocalDateTime.now(); // A data de criação é definida no momento da criação da tarefa
+        this.completed = false;
+        this.creationDate = LocalDateTime.now();
     }
 
-    // Construtor adicional que inclui o ID da tarefa
     public Task(int id, String titulo, String descricao, String status, int idUsuario, String priority) {
         this.id = id;
         this.titulo = titulo;
@@ -46,7 +44,10 @@ public class Task {
         this.creationDate = creationDate;
     }
 
-    // Getters e Setters
+    public Task(String description, String priority, LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public int getId() {
         return id;
     }
