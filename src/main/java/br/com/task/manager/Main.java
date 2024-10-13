@@ -23,7 +23,7 @@ public class Main {
         UsuarioProxyDAOInterface usuarioProxy = new UsuarioProxy(conn);
         TaskProxyDAOInterface taskProxy = new TasksProxy(conn);
 
-        UsuarioView usuarioView = new UsuarioView(conn, taskProxy);
+        UsuarioView usuarioView = new UsuarioView(conn, taskProxy, usuarioProxy);
         usuarioView.menu();
 
         SQLiteConnection.close();
