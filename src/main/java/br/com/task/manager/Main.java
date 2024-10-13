@@ -5,16 +5,19 @@ import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.TasksProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.db.proxy.UsuarioProxy;
+import br.com.task.manager.email.EmailService;
+import br.com.task.manager.email.EmailServiceImpl;
 import br.com.task.manager.model.Enum.TaskPriorityEnum;
 import br.com.task.manager.model.Task;
 import br.com.task.manager.model.Usuario;
+import br.com.task.manager.observer.TaskNotifier;
 import br.com.task.manager.view.UsuarioView;
 
 import java.sql.Connection;
 import java.util.List;
 
 public class Main {
-
+    
     public static void main(String[] args) {
 
         SQLiteConnection.createTables();
@@ -22,8 +25,10 @@ public class Main {
         Connection conn = SQLiteConnection.connect();
         UsuarioProxyDAOInterface usuarioProxy = new UsuarioProxy(conn);
         TaskProxyDAOInterface taskProxy = new TasksProxy(conn);
+        TaskNotifier taskNotifier = new TaskNotifier();
+        EmailService emailService = new EmailServiceImpl();
 
-        UsuarioView usuarioView = new UsuarioView(conn, taskProxy, usuarioProxy);
+        UsuarioView usuarioView = new UsuarioView(conn, taskProxy, usuarioProxy, taskNotifier, emailService);
         usuarioView.menu();
 
         SQLiteConnection.close();
