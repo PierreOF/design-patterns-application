@@ -1,6 +1,8 @@
 package br.com.task.manager.db.dao;
 
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
+import br.com.task.manager.model.Enum.TaskPriorityEnum;
+import br.com.task.manager.model.Enum.TaskStatusEnum;
 import br.com.task.manager.model.Task;
 
 import java.sql.*;
@@ -35,14 +37,13 @@ public class TaskDAO implements TaskProxyDAOInterface {
     }
 
     public void updateTask(Task task) {
-        String sql = "UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, completed = ? WHERE id = ?";
+        String sql = "UPDATE tasks SET title = ?, description = ?, status = ?, priority = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitulo());
             stmt.setString(2, task.getDescricao());
-            stmt.setString(3, task.getStatus());
-            stmt.setString(4, task.getPriority());
-            stmt.setBoolean(5, task.isCompleted());
-            stmt.setInt(6, task.getId());
+            stmt.setString(3, task.getStatus().getDescription());
+            stmt.setString(4, task.getPriority().getDescription());
+            stmt.setInt(5, task.getId());
             stmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -50,17 +51,19 @@ public class TaskDAO implements TaskProxyDAOInterface {
     }
 
     public void insertTask(Task task) {
-        String sql = "INSERT INTO tasks (title, description, status, user_id, priority, completed, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tasks (title, description, status, user_id, priority, creation_date) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitulo());
             stmt.setString(2, task.getDescricao());
-            stmt.setString(3, task.getStatus());
+            stmt.setString(3, task.getStatus().getDescription());
             stmt.setInt(4, task.getIdUsuario());
-            stmt.setString(5, task.getPriority());
-            stmt.setBoolean(6, task.isCompleted());
-            stmt.setTimestamp(7, Timestamp.valueOf(task.getCreationDate()));
-            stmt.execute();
+            stmt.setString(5, task.getPriority().getDescription());
+            stmt.setTimestamp(6, Timestamp.valueOf(task.getCreationDate()));
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new SQLException("Failed to insert task, no rows affected.");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -80,11 +83,9 @@ public class TaskDAO implements TaskProxyDAOInterface {
                 String descricao = rs.getString("description");
                 String status = rs.getString("status");
                 String priority = rs.getString("priority");
-                boolean completed = rs.getBoolean("completed");
                 LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
 
-
-                tasks.add(new Task(id, titulo, descricao, status, priority, completed, creationDate, usuarioId));
+                tasks.add(new Task(id, titulo, descricao, TaskStatusEnum.fromDescription(status), TaskPriorityEnum.fromDescription(priority), creationDate, usuarioId));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -105,7 +106,7 @@ public class TaskDAO implements TaskProxyDAOInterface {
                 boolean completed = rs.getBoolean("completed");
                 LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
                 int idUsuario = rs.getInt("user_id");
-                return new Task(id, titulo, descricao, status, priority, completed, creationDate, idUsuario);
+                return new Task(id, titulo, descricao, TaskStatusEnum.valueOf(status), TaskPriorityEnum.valueOf(priority), creationDate, idUsuario);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

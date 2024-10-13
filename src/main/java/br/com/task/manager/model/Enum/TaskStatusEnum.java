@@ -5,13 +5,22 @@ public enum TaskStatusEnum {
     CANCELADA("Cancelada"),
     CONCLUIDA("Concluida");
 
-    private String statusName;
+    private final String description;
 
-    TaskStatusEnum(String displayName) {
-        this.statusName = displayName;
+    TaskStatusEnum(String description) {
+        this.description = description;
     }
 
-    public String getStatusName() {
-        return statusName;
+    public String getDescription() {
+        return description;
+    }
+
+    public static TaskStatusEnum fromDescription(String description) {
+        for (TaskStatusEnum category : TaskStatusEnum.values()) {
+            if (category.getDescription().equalsIgnoreCase(description)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Descrição não encontrada: " + description);
     }
 }

@@ -14,10 +14,10 @@ public class Task {
     private TaskPriorityEnum priority;
     private final LocalDateTime creationDate;
 
-    public Task(String titulo, String descricao, TaskStatusEnum status, int idUsuario, TaskPriorityEnum priority) {
+    public Task(String titulo, String descricao, int idUsuario, TaskPriorityEnum priority) {
         this.titulo = titulo;
         this.descricao = descricao;
-        this.status = status;
+        this.status = TaskStatusEnum.PENDENTE;
         this.idUsuario = idUsuario;
         this.priority = priority;
         this.creationDate = LocalDateTime.now();

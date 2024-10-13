@@ -6,13 +6,22 @@ public enum TaskPriorityEnum {
     NORMAL("Normal"),
     BAIXA("Baixa");
 
-    private String displayName;
+    private final String description;
 
-    TaskPriorityEnum(String displayName) {
-        this.displayName = displayName;
+    TaskPriorityEnum(String description) {
+        this.description = description;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getDescription() {
+        return description;
+    }
+
+    public static TaskPriorityEnum fromDescription(String description) {
+        for (TaskPriorityEnum category : TaskPriorityEnum.values()) {
+            if (category.getDescription().equalsIgnoreCase(description)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Descrição não encontrada: " + description);
     }
 }
