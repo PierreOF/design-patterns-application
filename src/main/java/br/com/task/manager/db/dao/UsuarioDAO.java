@@ -1,5 +1,6 @@
-package br.com.task.manager.db;
+package br.com.task.manager.db.dao;
 
+import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.model.Usuario;
 
 import java.sql.Connection;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioDAO {
+public class UsuarioDAO implements UsuarioProxyDAOInterface {
     private Connection connection;
     private TaskDAO tasksdao;
 
@@ -18,7 +19,24 @@ public class UsuarioDAO {
         this.tasksdao = new TaskDAO(connection);
     }
 
-    public void insert(Usuario usuario) {
+    public Usuario userLogin(String email, String senha) {
+        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            stmt.setString(2, senha);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("name");
+                return new Usuario(id, nome, email, senha);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    public void insertUser(Usuario usuario) {
         String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNome());
@@ -30,7 +48,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void update(Usuario usuario) {
+    public void updateUser(Usuario usuario) {
         String sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, usuario.getNome());
@@ -43,7 +61,7 @@ public class UsuarioDAO {
         }
     }
 
-    public void delete(int id) {
+    public void deleteUser(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
