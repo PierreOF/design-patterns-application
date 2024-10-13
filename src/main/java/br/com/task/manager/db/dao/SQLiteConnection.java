@@ -46,7 +46,6 @@ public class SQLiteConnection {
                 + "description TEXT NOT NULL,"
                 + "status TEXT NOT NULL,"
                 + "priority TEXT NOT NULL,"
-                + "completed BOOLEAN NOT NULL,"
                 + "creation_date TIMESTAMP NOT NULL,"
                 + "user_id INTEGER NOT NULL,"
                 + "FOREIGN KEY(user_id) REFERENCES users(id)"

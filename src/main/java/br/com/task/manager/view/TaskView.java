@@ -1,5 +1,6 @@
 package br.com.task.manager.view;
 
+import br.com.task.manager.model.Enum.TaskPriorityEnum;
 import br.com.task.manager.model.Task;
 
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class TaskView {
         String description = scanner.nextLine();
         System.out.print("Enter task priority (Low, Medium, High): ");
         String priority = scanner.nextLine();
-        return new Task(description, priority, LocalDateTime.now());
+        return new Task(description, TaskPriorityEnum.valueOf(priority), LocalDateTime.now());
     }
 
     public int getTaskIdForDeletion() {
