@@ -13,6 +13,41 @@ public class TaskDAO {
         this.connection = connection;
     }
 
+    public void deleteTasksByUsuarioId(int id_user) {
+        String sql = "DELETE FROM tasks WHERE user_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id_user);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteTaskById(int id) {
+        String sql = "DELETE FROM tasks WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateTask(Task task) {
+        String sql = "UPDATE tasks SET title = ?, description = ?, status = ?, priority = ?, completed = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, task.getTitulo());
+            stmt.setString(2, task.getDescricao());
+            stmt.setString(3, task.getStatus());
+            stmt.setString(4, task.getPriority());
+            stmt.setBoolean(5, task.isCompleted());
+            stmt.setInt(6, task.getId());
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void insert(Task task) {
         String sql = "INSERT INTO tasks (title, description, status, user_id, priority, completed, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -54,5 +89,26 @@ public class TaskDAO {
             System.out.println(e.getMessage());
         }
         return tasks;
+    }
+
+    public Task getTaskById(int id) {
+        String sql = "SELECT * FROM tasks WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String titulo = rs.getString("title");
+                String descricao = rs.getString("description");
+                String status = rs.getString("status");
+                String priority = rs.getString("priority");
+                boolean completed = rs.getBoolean("completed");
+                LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
+                int idUsuario = rs.getInt("user_id");
+                return new Task(id, titulo, descricao, status, priority, completed, creationDate, idUsuario);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }
