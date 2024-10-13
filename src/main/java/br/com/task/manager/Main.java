@@ -1,17 +1,34 @@
 package br.com.task.manager;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import br.com.task.manager.db.SQLiteConnection;
+import br.com.task.manager.model.Task;
+import br.com.task.manager.model.Usuario;
+import br.com.task.manager.proxy.UsuarioProxy;
+
+import java.sql.Connection;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        SQLiteConnection.createTables();
+
+        Connection conn = SQLiteConnection.connect();
+        UsuarioProxy proxy = new UsuarioProxy(conn);
+
+        proxy.addUsuario(new Usuario("João", "Joao@gmail.com", "123"));
+        proxy.addTask(new Task("Estudar Java", "Estudar Java", "pendente", 1));
+        proxy.addTask(new Task("Estudar Python", "Estudar Python", "pendente", 1));
+        proxy.addTask(new Task("Estudar JavaScript", "Estudar JavaScript", "pendente", 1));
+
+        Usuario usuario = proxy.getUsuarioById(1);
+        System.out.println("Usuário: " + usuario.getNome());
+
+        List<Task> tasks = proxy.getTasksByUsuarioId(1);
+        for (Task t : tasks) {
+            System.out.println("Task: " + t.getDescricao() + " | Status: " + t.getStatus());
         }
+
+        SQLiteConnection.close();
     }
 }
