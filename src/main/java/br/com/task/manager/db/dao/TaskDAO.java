@@ -1,22 +1,23 @@
-package br.com.task.manager.db;
+package br.com.task.manager.db.dao;
 
+import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.model.Task;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-public class TaskDAO {
+public class TaskDAO implements TaskProxyDAOInterface {
     private Connection connection;
 
     public TaskDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public void deleteTasksByUsuarioId(int id_user) {
+    public void deleteTasksByUsuarioId(int usuarioId) {
         String sql = "DELETE FROM tasks WHERE user_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id_user);
+            stmt.setInt(1, usuarioId);
             stmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -48,7 +49,7 @@ public class TaskDAO {
         }
     }
 
-    public void insert(Task task) {
+    public void insertTask(Task task) {
         String sql = "INSERT INTO tasks (title, description, status, user_id, priority, completed, creation_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -65,7 +66,7 @@ public class TaskDAO {
         }
     }
 
-    public List<Task> getTasksByUsuario(int usuarioId) {
+    public List<Task> getTasksByUserId(int usuarioId) {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM tasks WHERE user_id = ?";
 
