@@ -1,5 +1,6 @@
-package br.com.task.manager.db;
+package br.com.task.manager.db.dao;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -58,6 +59,15 @@ public class SQLiteConnection {
             logger.info("Tables created successfully");
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteDatabase() {
+        File dbFile = new File("task-manager.db");
+        if (dbFile.delete()) {
+            logger.info("Database deleted successfully");
+        } else {
+            logger.warning("Failed to delete the database");
         }
     }
 }
