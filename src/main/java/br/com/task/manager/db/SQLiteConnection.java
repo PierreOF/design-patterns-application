@@ -9,7 +9,6 @@ public class SQLiteConnection {
     private static final String DATABASE_URL = "jdbc:sqlite:task-manager.db";
     private static Connection connection;
 
-    // Conecta ao banco de dados SQLite
     public static Connection connect() {
         try {
             connection = DriverManager.getConnection(DATABASE_URL);
@@ -19,7 +18,6 @@ public class SQLiteConnection {
         return connection;
     }
 
-    // Fecha a conexão com o banco de dados
     public static void close() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -30,7 +28,6 @@ public class SQLiteConnection {
         }
     }
 
-    // Cria as tabelas "users" e "tasks" no banco de dados
     public static void createTables() {
         String createUsersTable = "CREATE TABLE IF NOT EXISTS users ("
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
