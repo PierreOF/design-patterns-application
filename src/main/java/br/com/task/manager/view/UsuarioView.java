@@ -3,6 +3,7 @@ package br.com.task.manager.view;
 import br.com.task.manager.controller.TaskController;
 import br.com.task.manager.controller.UsuarioController;
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
+import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.model.Usuario;
 
 import java.sql.Connection;
@@ -10,11 +11,11 @@ import java.util.Scanner;
 
 public class UsuarioView {
 
-    private UsuarioController usuarioController;
-    private Scanner scanner;
-    private TaskProxyDAOInterface taskProxyDAO;
+    private final UsuarioController usuarioController;
+    private final Scanner scanner;
+    private final TaskProxyDAOInterface taskProxyDAO;
 
-    public UsuarioView(Connection connection, TaskProxyDAOInterface taskProxyDAO) {
+    public UsuarioView(Connection connection, TaskProxyDAOInterface taskProxyDAO, UsuarioProxyDAOInterface usuarioProxyDAO) {
         this.usuarioController = new UsuarioController(connection);
         this.scanner = new Scanner(System.in);
         this.taskProxyDAO = taskProxyDAO;
