@@ -1,50 +1,49 @@
 package br.com.task.manager.model;
 
+import br.com.task.manager.model.Enum.TaskPriorityEnum;
+import br.com.task.manager.model.Enum.TaskStatusEnum;
+
 import java.time.LocalDateTime;
 
 public class Task {
     private int id;
     private String titulo;
     private String descricao;
-    private String status;
+    private TaskStatusEnum status;
     private int idUsuario;
-    private String priority;
-    private boolean completed;
+    private TaskPriorityEnum priority;
     private final LocalDateTime creationDate;
 
-    public Task(String titulo, String descricao, String status, int idUsuario, String priority) {
+    public Task(String titulo, String descricao, TaskStatusEnum status, int idUsuario, TaskPriorityEnum priority) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
         this.idUsuario = idUsuario;
         this.priority = priority;
-        this.completed = false;
         this.creationDate = LocalDateTime.now();
     }
 
-    public Task(int id, String titulo, String descricao, String status, int idUsuario, String priority) {
+    public Task(int id, String titulo, String descricao, TaskStatusEnum status, int idUsuario, TaskPriorityEnum priority) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
         this.idUsuario = idUsuario;
         this.priority = priority;
-        this.completed = false;
         this.creationDate = LocalDateTime.now();
     }
 
-    public Task(int id, String titulo, String descricao, String status, String priority, boolean completed, LocalDateTime creationDate, int usuarioId) {
+    public Task(int id, String titulo, String descricao, TaskStatusEnum status, TaskPriorityEnum priority, LocalDateTime creationDate, int usuarioId) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.status = status;
         this.idUsuario = usuarioId;
         this.priority = priority;
-        this.completed = completed;
         this.creationDate = creationDate;
     }
 
-    public Task(String description, String priority, LocalDateTime creationDate) {
+    public Task(String description, TaskPriorityEnum priority, LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -72,11 +71,11 @@ public class Task {
         this.descricao = descricao;
     }
 
-    public String getStatus() {
+    public TaskStatusEnum getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(TaskStatusEnum status) {
         this.status = status;
     }
 
@@ -88,20 +87,12 @@ public class Task {
         this.idUsuario = idUsuario;
     }
 
-    public String getPriority() {
+    public TaskPriorityEnum getPriority() {
         return priority;
     }
 
-    public void setPriority(String priority) {
+    public void setPriority(TaskPriorityEnum priority) {
         this.priority = priority;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
     }
 
     public LocalDateTime getCreationDate() {
@@ -117,7 +108,6 @@ public class Task {
                 ", status='" + status + '\'' +
                 ", idUsuario=" + idUsuario +
                 ", priority='" + priority + '\'' +
-                ", completed=" + completed +
                 ", creationDate=" + creationDate +
                 '}';
     }
