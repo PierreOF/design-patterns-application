@@ -55,9 +55,7 @@ public class UsuarioController {
             return false;
         }
         usuarioProxy.insertUser(novoUsuario);
-        System.out.println("Enviando email...");
         emailService.sendEmail(email, "Conta criada com sucesso", "Parabéns sua conta foi criado com sucesso!");
-        System.out.println("Email enviado com sucesso!");
         return true;
     }
 
