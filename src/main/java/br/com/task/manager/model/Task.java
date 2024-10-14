@@ -4,6 +4,7 @@ import br.com.task.manager.model.Enum.TaskPriorityEnum;
 import br.com.task.manager.model.Enum.TaskStatusEnum;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Task {
     private int id;
@@ -101,14 +102,16 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", status='" + status + '\'' +
-                ", idUsuario=" + idUsuario +
-                ", priority='" + priority + '\'' +
-                ", creationDate=" + creationDate +
-                '}';
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy | HH:mm");
+        String formattedDate = creationDate.format(formatter);
+
+        return "==========================\n" +
+                "ID:                " + id + "\n" +
+                "Título:            " + titulo + "\n" +
+                "Descrição:         " + descricao + "\n" +
+                "Status:            " + status + "\n" +
+                "Prioridade:        " + priority + "\n" +
+                "Data de Criação:   " + formattedDate + "\n" +
+                "==========================";
     }
 }
