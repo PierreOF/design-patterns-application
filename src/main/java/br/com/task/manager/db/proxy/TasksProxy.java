@@ -18,46 +18,61 @@ public class TasksProxy implements TaskProxyDAOInterface {
     }
 
     @Override
-    public void insertTask(Task task) {
-        taskDAO.insertTask(task);
-        // Invalida o cache do usuário para forçar a atualização na próxima leitura
+    public Integer insertTask(Task task) {
+        Integer taskId = taskDAO.insertTask(task);
+        task.setId(taskId);
         taskCacheByUser.remove(task.getIdUsuario());
-        taskCache.put(task.getId(), task);
+        return taskId;
     }
 
     @Override
     public void updateTask(Task task) {
         taskDAO.updateTask(task);
-        // Invalida o cache do usuário
-        taskCacheByUser.remove(task.getIdUsuario());
         taskCache.put(task.getId(), task);
+        taskCacheByUser.remove(task.getIdUsuario());
     }
 
     @Override
     public void deleteTaskById(int id) {
         Task task = taskCache.get(id);
         if (task != null) {
-            taskDAO.deleteTaskById(id);
-            taskCache.remove(id);
             taskCacheByUser.remove(task.getIdUsuario());
         }
-    }
-
-    @Override
-    public void deleteTasksByUsuarioId(int id) {
-        int userId = taskCache.get(id).getIdUsuario();
-        taskCacheByUser.remove(userId);
         taskDAO.deleteTaskById(id);
         taskCache.remove(id);
     }
 
+
+    @Override
+    public void deleteTasksByUsuarioId(int userId) {
+        taskDAO.deleteTasksByUsuarioId(userId);
+
+        taskCacheByUser.remove(userId);
+
+        taskCache.entrySet().removeIf(entry -> entry.getValue().getIdUsuario() == userId);
+    }
+
+    @Override
+    public void clearCacheByUserId(int userId) {
+        taskCacheByUser.remove(userId);
+        taskCache.entrySet().removeIf(entry -> entry.getValue().getIdUsuario() == userId);
+    }
+
     @Override
     public List<Task> getTasksByUserId(int userId) {
-        if (!taskCacheByUser.containsKey(userId)) {
-            List<Task> tasks = taskDAO.getTasksByUserId(userId);
-            taskCacheByUser.put(userId, tasks);
+        if (taskCacheByUser.containsKey(userId)) {
+            return taskCacheByUser.get(userId);
         }
-        return taskCacheByUser.get(userId);
+
+        List<Task> tasks = taskDAO.getTasksByUserId(userId);
+
+        taskCacheByUser.put(userId, tasks);
+
+        for (Task task : tasks) {
+            taskCache.put(task.getId(), task);
+        }
+
+        return tasks;
     }
 
     @Override
@@ -65,11 +80,10 @@ public class TasksProxy implements TaskProxyDAOInterface {
         if (taskCache.containsKey(id)) {
             return taskCache.get(id);
         }
-
         Task task = taskDAO.getTaskById(id);
         if (task != null) {
             taskCache.put(id, task);
         }
-        return taskCache.get(id);
+        return task;
     }
 }

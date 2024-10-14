@@ -26,6 +26,10 @@ public class TaskDAO implements TaskProxyDAOInterface {
         }
     }
 
+    // Esse método não é utilizado no banco de dados e sim no proxy
+    @Override
+    public void clearCacheByUserId(int userId) {}
+
     public void deleteTaskById(int id) {
         String sql = "DELETE FROM tasks WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -50,25 +54,35 @@ public class TaskDAO implements TaskProxyDAOInterface {
         }
     }
 
-    public void insertTask(Task task) {
+    @Override
+    public Integer insertTask(Task task) {
         String sql = "INSERT INTO tasks (title, description, status, user_id, priority, creation_date) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, task.getTitulo());
             stmt.setString(2, task.getDescricao());
             stmt.setString(3, task.getStatus().getDescription());
             stmt.setInt(4, task.getIdUsuario());
             stmt.setString(5, task.getPriority().getDescription());
             stmt.setTimestamp(6, Timestamp.valueOf(task.getCreationDate()));
+
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected == 0) {
                 throw new SQLException("Failed to insert task, no rows affected.");
+            }
+
+            // Obter o ID gerado
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); // Retorna o ID gerado
+                } else {
+                    throw new SQLException("Failed to insert task, no ID obtained.");
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
     public List<Task> getTasksByUserId(int usuarioId) {
         List<Task> tasks = new ArrayList<>();
         String sql = "SELECT * FROM tasks WHERE user_id = ?";

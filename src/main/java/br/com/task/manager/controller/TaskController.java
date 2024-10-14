@@ -37,4 +37,8 @@ public class TaskController {
         List<Task> tasks = database.getTasksByUserId(userId);
         return sortingStrategy.sort(tasks);
     }
+
+    public void clearCacheByUserId(int userId) {
+        database.clearCacheByUserId(userId);
+    }
 }
