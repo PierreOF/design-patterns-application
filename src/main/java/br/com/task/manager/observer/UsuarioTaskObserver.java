@@ -15,7 +15,7 @@ public class UsuarioTaskObserver implements TaskObserver {
 
     @Override
     public void update(String taskDetails) {
-        System.out.println("Notificando usuário " + usuario.getNome() + " sobre task: " + taskDetails);
+        System.out.println("Notificando usuário " + usuario.getNome() + " sobre task " + taskDetails);
         emailService.sendEmail(usuario.getEmail(), "Atualização de Tarefa", taskDetails);
     }
 }
