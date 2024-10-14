@@ -3,6 +3,7 @@ package br.com.task.manager.view;
 import br.com.task.manager.controller.TaskController;
 import br.com.task.manager.controller.UsuarioController;
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
+import br.com.task.manager.db.proxy.TasksProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.email.EmailService;
 import br.com.task.manager.model.Usuario;
@@ -21,7 +22,7 @@ public class UsuarioView {
     public UsuarioView(Connection connection, TaskProxyDAOInterface taskProxyDAO, UsuarioProxyDAOInterface usuarioProxyDAO, TaskNotifier taskNotifier, EmailService emailService) {
         this.usuarioController = new UsuarioController(connection, taskNotifier, emailService);
         this.scanner = new Scanner(System.in);
-        this.taskProxyDAO = taskProxyDAO;
+        this.taskProxyDAO = new TasksProxy(connection);
         this.taskNotifier = taskNotifier;
     }
 
