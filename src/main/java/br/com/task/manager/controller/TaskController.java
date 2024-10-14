@@ -29,7 +29,7 @@ public class TaskController {
             return result;
         }
         database.insertTask(task);
-        taskNotifier.notifyObservers("Nova task criada: " + task.getTitulo());
+        taskNotifier.notifyObservers("task criada com nome " + task.getTitulo());
         return result;
     }
 
