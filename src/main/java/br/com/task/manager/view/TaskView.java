@@ -54,7 +54,7 @@ public class TaskView {
     }
 
     private void displayTasks() {
-        System.out.print("Escolha a estratégia de ordenação (1: PRIORIDADE, 2: DATA): ");
+        System.out.print("Escolha a estratégia de ordenação (1: PRIORIDADE, 2: STATUS, 3: DATA): ");
         int sortOption = Integer.parseInt(scanner.nextLine());
         TaskSortingStrategy sortingStrategy = getSortingStrategy(sortOption);
 
@@ -102,10 +102,12 @@ public class TaskView {
             case 1:
                 return new SortByPriority();
             case 2:
+                return new SortByCompletionStatus();
+            case 3:
                 return new SortByCreationDate();
             default:
-                System.out.println("Opção inválida. Usando a ordenação padrão por task cumprida.");
-                return new SortByCompletionStatus();
+                System.out.println("Opção inválida. Usando a ordenação padrão por data de criação.");
+                return new SortByCreationDate();
         }
     }
 }
