@@ -85,7 +85,7 @@ public class TaskView {
         String title = scanner.nextLine();
         System.out.print("Digite a descrição da tarefa: ");
         String description = scanner.nextLine();
-        System.out.print("Digite a prioridade da tarefa (Low, Medium, High): ");
+        System.out.print("Digite a prioridade da tarefa (Urgente, Importante, Normal, Baixa): ");
         String priority = scanner.nextLine();
         return new Task(title, description, userId, TaskPriorityEnum.fromDescription(priority));
     }
@@ -102,7 +102,7 @@ public class TaskView {
             case 2:
                 return new SortByCreationDate();
             default:
-                System.out.println("Opção inválida. Usando a ordenação padrão por prioridade.");
+                System.out.println("Opção inválida. Usando a ordenação padrão por task cumprida.");
                 return new SortByCompletionStatus();
         }
     }

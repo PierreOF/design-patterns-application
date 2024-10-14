@@ -8,7 +8,8 @@ import java.util.List;
 public class SortByCreationDate implements TaskSortingStrategy {
     @Override
     public List<Task> sort(List<Task> tasks) {
-        tasks.sort(Comparator.comparing(Task::getCreationDate));
-        return tasks;
+        return tasks.stream()
+                .sorted(Comparator.comparing(Task::getCreationDate))
+                .toList();
     }
 }
