@@ -3,10 +3,7 @@ package br.com.task.manager.view;
 import br.com.task.manager.controller.TaskController;
 import br.com.task.manager.model.Enum.TaskPriorityEnum;
 import br.com.task.manager.model.Task;
-import br.com.task.manager.strategy.SortByCompletionStatus;
-import br.com.task.manager.strategy.SortByCreationDate;
-import br.com.task.manager.strategy.SortByPriority;
-import br.com.task.manager.strategy.TaskSortingStrategy;
+import br.com.task.manager.strategy.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -54,7 +51,7 @@ public class TaskView {
     }
 
     private void displayTasks() {
-        System.out.print("Escolha a estratégia de ordenação (1: PRIORIDADE, 2: STATUS, 3: DATA): ");
+        System.out.print("Escolha a estratégia de ordenação (1: PRIORIDADE, 2: STATUS, 3: DATA, 4 TITULO): ");
         int sortOption = Integer.parseInt(scanner.nextLine());
         TaskSortingStrategy sortingStrategy = getSortingStrategy(sortOption);
 
@@ -105,6 +102,8 @@ public class TaskView {
                 return new SortByCompletionStatus();
             case 3:
                 return new SortByCreationDate();
+            case 4:
+                return new SortByTitle();
             default:
                 System.out.println("Opção inválida. Usando a ordenação padrão por data de criação.");
                 return new SortByCreationDate();
