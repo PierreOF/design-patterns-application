@@ -38,7 +38,7 @@ public class EmailServiceImpl implements EmailService {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(subject);
             message.setText(content);
-
+            System.out.println("Enviando email...");
             Transport.send(message);
             System.out.println("E-mail enviado com sucesso para " + to);
 
