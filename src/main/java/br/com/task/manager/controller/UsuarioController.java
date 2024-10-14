@@ -1,5 +1,6 @@
 package br.com.task.manager.controller;
 
+import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.UsuarioProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.email.EmailService;
@@ -26,6 +27,8 @@ public class UsuarioController {
         Usuario usuario = usuarioProxy.userLogin(email, senha);
         if (usuario != null) {
             taskNotifier.addObserver(new UsuarioTaskObserver(usuario, emailService));
+        } else {
+            return null;
         }
         return usuario;
     }
@@ -40,8 +43,7 @@ public class UsuarioController {
         return true;
     }
 
-    public void logout() {
-    }
+
 
     private boolean EmailAlreadyExists(String email) {
         List<Usuario> usuarios = usuarioProxy.getAllUsuarios();

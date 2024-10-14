@@ -25,9 +25,10 @@ public class UsuarioProxy implements UsuarioProxyDAOInterface {
         }
 
         Usuario usuario = usuarioDAO.userLogin(email, senha);
-        if(usuario != null) {
-            usuarioLoginCache.put(usuario.getId(), usuario);
+        if (usuario == null) {
+            return null;
         }
+        usuarioLoginCache.put(usuario.getId(), usuario);
         return usuarioLoginCache.get(usuario.getId());
     }
 
