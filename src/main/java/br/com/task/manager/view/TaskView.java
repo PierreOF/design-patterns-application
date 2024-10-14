@@ -8,7 +8,6 @@ import br.com.task.manager.strategy.SortByCreationDate;
 import br.com.task.manager.strategy.SortByPriority;
 import br.com.task.manager.strategy.TaskSortingStrategy;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,6 +25,7 @@ public class TaskView {
     public void menu() {
         int opcao;
         do {
+            System.out.println("\n");
             System.out.println("---- Menu de Task ----");
             System.out.println("1. Mostrar as tasks");
             System.out.println("2. Criar uma task");
@@ -46,7 +46,7 @@ public class TaskView {
                     break;
                 case 4:
                     System.out.println("Saindo...");
-                    break;
+                    taskController.clearCacheByUserId(userId);
                 default:
                     System.out.println("Opção inválida.");
             }
@@ -62,6 +62,8 @@ public class TaskView {
         if (tasks.isEmpty()) {
             System.out.println("Nenhuma tarefa encontrada.");
         } else {
+            System.out.println("==========================\n" +
+                               "         Task Info         ");
             for (Task task : tasks) {
                 System.out.println(task);
             }
