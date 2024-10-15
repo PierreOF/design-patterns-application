@@ -132,8 +132,9 @@ public class TaskView {
         }
 
         TaskSortingStrategy sortingStrategy = getSortingStrategy(sortOption);
+        taskController.setSortingStrategy(sortingStrategy);
 
-        List<Task> tasks = taskController.getAllTasks(userId, sortingStrategy);
+        List<Task> tasks = taskController.getAllTasks(userId);
         if (tasks.isEmpty()) {
             System.out.println("Nenhuma tarefa encontrada.");
         } else {

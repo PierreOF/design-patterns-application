@@ -8,6 +8,7 @@ import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.model.Task;
 import br.com.task.manager.observer.TaskNotifier;
+import br.com.task.manager.strategy.SortByCreationDate;
 import br.com.task.manager.strategy.TaskSortingStrategy;
 
 import java.util.List;
@@ -17,11 +18,17 @@ public class TaskController {
     private final TaskInterfaceValidation taskValidation;
     private final TaskProxyDAOInterface database;
     private final TaskNotifier taskNotifier;
+    private TaskSortingStrategy taskSortingStrategy;
 
     public TaskController(TaskProxyDAOInterface databaseTask, TaskNotifier taskNotifier) {
         this.database = databaseTask;
         this.taskNotifier = taskNotifier;
         this.taskValidation = new TaskValidation();
+        this.taskSortingStrategy = new SortByCreationDate();
+    }
+
+    public void setSortingStrategy(TaskSortingStrategy taskSortingStrategy){
+        this.taskSortingStrategy = taskSortingStrategy;
     }
 
     public ResultValidationEnum addTask(Task task) {
@@ -58,8 +65,10 @@ public class TaskController {
         taskNotifier.notifyObservers("Task com ID: " + taskId + " deletado");
     }
 
-    public List<Task> getAllTasks(int userId, TaskSortingStrategy sortingStrategy) {
+    public List<Task> getAllTasks(int userId) {
         List<Task> tasks = database.getTasksByUserId(userId);
-        return sortingStrategy.sort(tasks);
+        return taskSortingStrategy.sort(tasks);
     }
+
+
 }
