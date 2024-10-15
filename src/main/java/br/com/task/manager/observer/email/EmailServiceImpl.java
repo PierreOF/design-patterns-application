@@ -1,4 +1,6 @@
-package br.com.task.manager.email;
+package br.com.task.manager.observer.email;
+
+import br.com.task.manager.observer.TaskObserver;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -13,6 +15,7 @@ public class EmailServiceImpl implements EmailService {
     private final String port = System.getenv("MAILTRAP_PORT");
     private final String fromEmail = System.getenv("MAILTRAP_FROM_EMAIL");
 
+    @Override
     public void sendEmail(String to, String subject, String content) {
         if (username == null || password == null || host == null || port == null || fromEmail == null) {
             System.out.println("Erro: Variáveis de ambiente não configuradas corretamente.");

@@ -7,7 +7,8 @@ import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.TasksProxy;
 import br.com.task.manager.db.proxy.UsuarioProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
-import br.com.task.manager.email.EmailService;
+import br.com.task.manager.observer.EmailObserver;
+import br.com.task.manager.observer.email.EmailService;
 import br.com.task.manager.model.Usuario;
 import br.com.task.manager.observer.TaskNotifier;
 import br.com.task.manager.observer.UsuarioTaskObserver;
@@ -61,8 +62,8 @@ public class UsuarioController {
         }
 
         usuarioProxy.insertUser(novoUsuario);
-        emailService.sendEmail(email, "Conta criada com sucesso", "Parabéns sua conta foi criado com sucesso!");
-        System.out.println("Email enviado com sucesso!");
+        taskNotifier.addObserver(new EmailObserver(emailService, novoUsuario.getEmail()));
+        taskNotifier.notifyObservers("Sucesso ao registrar");
         return ResultValidationEnum.APPROVED;
     }
 
