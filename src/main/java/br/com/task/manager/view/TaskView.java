@@ -148,13 +148,11 @@ public class TaskView {
     private void addNewTask() {
         Task newTask = getNewTaskDetails();
         taskController.addTask(newTask);
-        System.out.println("Tarefa adicionada com sucesso!");
     }
 
     private void deleteTask() {
         int taskId = getTaskIdForUse();
         taskController.deleteTask(taskId);
-        System.out.println("Tarefa deletada com sucesso!");
     }
 
     private Task getNewTaskDetails() {
