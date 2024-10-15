@@ -30,6 +30,7 @@ public class TaskController {
             return result;
         }
         database.insertTask(task);
+        System.out.println("Tarefa adicionada com sucesso!");
         taskNotifier.notifyObservers("task criada com nome " + task.getTitulo());
         return result;
     }
