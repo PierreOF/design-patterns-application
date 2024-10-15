@@ -43,6 +43,15 @@ public class TaskController {
         return result;
     }
 
+    public Task getTaskById(int taskId) {
+        Task task = database.getTaskById(taskId);
+        ResultValidationEnum result = taskValidation.validateTask(task);
+        if (result == ResultValidationEnum.REJECTED) {
+            return null;
+        }
+        return task;
+    }
+
     public void deleteTask(int taskId) {
         database.deleteTaskById(taskId);
         taskNotifier.notifyObservers("Task com ID: " + taskId + " deletado");
@@ -52,6 +61,7 @@ public class TaskController {
         List<Task> tasks = database.getTasksByUserId(userId);
         return sortingStrategy.sort(tasks);
     }
+
 
     public void clearCacheByUserId(int userId) {
         database.clearCacheByUserId(userId);
