@@ -24,7 +24,7 @@ public class Main {
         TaskNotifier taskNotifier = new TaskNotifier();
         EmailService emailService = new EmailServiceImpl();
 
-        UsuarioView usuarioView = new UsuarioView(conn, taskProxy, usuarioProxy, taskNotifier, emailService);
+        UsuarioView usuarioView = new UsuarioView(conn, taskNotifier, emailService);
         usuarioView.menu();
 
         SQLiteConnection.close();
