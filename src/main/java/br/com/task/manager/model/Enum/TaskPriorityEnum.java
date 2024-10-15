@@ -22,6 +22,7 @@ public enum TaskPriorityEnum {
                 return category;
             }
         }
-        throw new IllegalArgumentException("Descrição não encontrada: " + description);
+        System.out.println("Descrição não encontrada");
+        return null;
     }
 }
