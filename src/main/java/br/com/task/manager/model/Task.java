@@ -24,6 +24,15 @@ public class Task {
         this.creationDate = LocalDateTime.now();
     }
 
+    public Task(String titulo, String descricao, String status, int userId, String priority, LocalDateTime creationDate) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.status = TaskStatusEnum.fromDescription(status);
+        this.idUsuario = userId;
+        this.priority = TaskPriorityEnum.fromDescription(priority);
+        this.creationDate = creationDate;
+    }
+
     public Task(int id, String titulo, String descricao, TaskStatusEnum status, int idUsuario, TaskPriorityEnum priority) {
         this.id = id;
         this.titulo = titulo;
