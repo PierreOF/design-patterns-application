@@ -40,17 +40,27 @@ public class TaskDAO implements TaskProxyDAOInterface {
         }
     }
 
+    @Override
     public void updateTask(Task task) {
-        String sql = "UPDATE tasks SET title = ?, description = ?, status = ?, priority = ? WHERE id = ?";
+        String sql = "UPDATE tasks SET title = ?, description = ?, status = ?, priority = ? WHERE id = ? AND user_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, task.getTitulo());
             stmt.setString(2, task.getDescricao());
             stmt.setString(3, task.getStatus().getDescription());
             stmt.setString(4, task.getPriority().getDescription());
             stmt.setInt(5, task.getId());
-            stmt.executeUpdate();
+            stmt.setInt(6, task.getIdUsuario());
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Tarefa atualizada com sucesso! Task ID: " + task.getId());
+                System.out.println("Novos dados da task: " + task);
+            } else {
+                System.out.println("Nenhuma tarefa foi atualizada. Verifique o ID da tarefa.");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao atualizar a tarefa", e);
         }
     }
 
