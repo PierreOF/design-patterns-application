@@ -99,6 +99,10 @@ public class UsuarioDAO implements UsuarioProxyDAOInterface {
         return null;
     }
 
+    // Método implementado apenas para o Proxy
+    @Override
+    public void clearCache() {}
+
     public List<Usuario> getAllUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM users";

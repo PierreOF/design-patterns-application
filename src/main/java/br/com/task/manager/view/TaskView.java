@@ -1,6 +1,7 @@
 package br.com.task.manager.view;
 
 import br.com.task.manager.controller.TaskController;
+import br.com.task.manager.controller.UsuarioController;
 import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.model.Enum.TaskPriorityEnum;
 import br.com.task.manager.model.Task;
@@ -17,10 +18,12 @@ public class TaskView {
 
     private final Scanner scanner = new Scanner(System.in);
     private final TaskController taskController;
+    private final UsuarioController usuarioController;
     private final int userId;
 
-    public TaskView(TaskController taskController, int userId) {
+    public TaskView(TaskController taskController, int userId, UsuarioController usuarioController) {
         this.taskController = taskController;
+        this.usuarioController = usuarioController;
         this.userId = userId;
     }
 
@@ -56,16 +59,12 @@ public class TaskView {
                     break;
                 case 5:
                     System.out.println("Saindo...");
-                    logout();
+                    usuarioController.clearCacheLogout(userId);
                     break;
                 default:
                     System.out.println("Opção inválida.");
             }
         } while (opcao != 5);
-    }
-
-    private void logout() {
-        taskController.clearCacheByUserId(userId);
     }
 
     private void atualizarTask() {

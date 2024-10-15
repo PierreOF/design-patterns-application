@@ -71,4 +71,10 @@ public class UsuarioProxy implements UsuarioProxyDAOInterface {
         }
         return usuarioCache.get(id);
     }
+
+    @Override
+    public void clearCache() {
+        usuarioCache.clear();
+        usuarioLoginCache.clear();
+    }
 }

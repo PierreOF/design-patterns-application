@@ -3,6 +3,8 @@ package br.com.task.manager.controller;
 import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.controller.validation.UserValidation;
 import br.com.task.manager.controller.validation.interfaces.UserInterfaceValidation;
+import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
+import br.com.task.manager.db.proxy.TasksProxy;
 import br.com.task.manager.db.proxy.UsuarioProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.email.EmailService;
@@ -15,12 +17,14 @@ import java.util.List;
 
 public class UsuarioController {
     private final UserInterfaceValidation userInterfaceValidation;
+    private final TaskProxyDAOInterface taskProxyDAO;
     private final UsuarioProxyDAOInterface usuarioProxy;
     private final TaskNotifier taskNotifier;
     private final EmailService emailService;
 
     public UsuarioController(Connection connection, TaskNotifier taskNotifier, EmailService emailService) {
         this.usuarioProxy = new UsuarioProxy(connection);
+        this.taskProxyDAO = new TasksProxy(connection);
         this.taskNotifier = taskNotifier;
         this.emailService = emailService;
         this.userInterfaceValidation = new UserValidation();
@@ -65,5 +69,10 @@ public class UsuarioController {
     private ResultValidationEnum emailAlreadyExists(String email) {
         List<Usuario> usuarios = usuarioProxy.getAllUsuarios();
         return userInterfaceValidation.emailAlreadyExists(usuarios, email);
+    }
+
+    public void clearCacheLogout(int userId) {
+        taskProxyDAO.clearCacheByUserId(userId);
+        usuarioProxy.clearCache();
     }
 }

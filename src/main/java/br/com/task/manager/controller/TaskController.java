@@ -5,6 +5,7 @@ import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.controller.validation.TaskValidation;
 import br.com.task.manager.controller.validation.interfaces.TaskInterfaceValidation;
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
+import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.model.Task;
 import br.com.task.manager.observer.TaskNotifier;
 import br.com.task.manager.strategy.TaskSortingStrategy;
@@ -17,8 +18,8 @@ public class TaskController {
     private final TaskProxyDAOInterface database;
     private final TaskNotifier taskNotifier;
 
-    public TaskController(TaskProxyDAOInterface database, TaskNotifier taskNotifier) {
-        this.database = database;
+    public TaskController(TaskProxyDAOInterface databaseTask, TaskNotifier taskNotifier) {
+        this.database = databaseTask;
         this.taskNotifier = taskNotifier;
         this.taskValidation = new TaskValidation();
     }
@@ -60,10 +61,5 @@ public class TaskController {
     public List<Task> getAllTasks(int userId, TaskSortingStrategy sortingStrategy) {
         List<Task> tasks = database.getTasksByUserId(userId);
         return sortingStrategy.sort(tasks);
-    }
-
-
-    public void clearCacheByUserId(int userId) {
-        database.clearCacheByUserId(userId);
     }
 }

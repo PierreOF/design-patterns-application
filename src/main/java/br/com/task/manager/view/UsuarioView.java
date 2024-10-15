@@ -5,6 +5,7 @@ import br.com.task.manager.controller.UsuarioController;
 import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.TasksProxy;
+import br.com.task.manager.db.proxy.UsuarioProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
 import br.com.task.manager.email.EmailService;
 import br.com.task.manager.model.Usuario;
@@ -70,7 +71,7 @@ public class UsuarioView {
         if (usuario != null) {
             System.out.println("Login realizado com sucesso! Bem-vindo, " + usuario.getNome() + "!");
             TaskController taskController = new TaskController(taskProxyDAO, taskNotifier);
-            TaskView taskView = new TaskView(taskController, usuario.getId());
+            TaskView taskView = new TaskView(taskController, usuario.getId(), usuarioController);
             taskView.menu();
         } else {
             System.out.println("Email ou senha inválidos.");

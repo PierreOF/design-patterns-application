@@ -11,4 +11,5 @@ public interface UsuarioProxyDAOInterface {
     void deleteUser(int id);
     List<Usuario> getAllUsuarios();
     Usuario getUsuarioById(int id);
+    void clearCache();
 }
