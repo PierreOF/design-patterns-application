@@ -75,5 +75,6 @@ public class UsuarioController {
     public void clearCacheLogout(int userId) {
         taskProxyDAO.clearCacheByUserId(userId);
         usuarioProxy.clearCache();
+        taskNotifier.removeObserver(new UsuarioTaskObserver(usuarioProxy.getUsuarioById(userId), emailService));
     }
 }
