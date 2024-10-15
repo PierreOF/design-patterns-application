@@ -71,10 +71,9 @@ public class TaskDAO implements TaskProxyDAOInterface {
                 throw new SQLException("Failed to insert task, no rows affected.");
             }
 
-            // Obter o ID gerado
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1); // Retorna o ID gerado
+                    return generatedKeys.getInt(1);
                 } else {
                     throw new SQLException("Failed to insert task, no ID obtained.");
                 }

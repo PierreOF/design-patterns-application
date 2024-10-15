@@ -3,7 +3,6 @@ package br.com.task.manager.view;
 import br.com.task.manager.controller.TaskController;
 import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.model.Enum.TaskPriorityEnum;
-import br.com.task.manager.model.Enum.TaskStatusEnum;
 import br.com.task.manager.model.Task;
 import br.com.task.manager.strategy.SortByCompletionStatus;
 import br.com.task.manager.strategy.SortByCreationDate;
@@ -56,11 +55,16 @@ public class TaskView {
                     break;
                 case 5:
                     System.out.println("Saindo...");
+                    logout();
                     break;
                 default:
                     System.out.println("Opção inválida.");
             }
         } while (opcao != 5);
+    }
+
+    private void logout() {
+        taskController.clearCacheByUserId(userId);
     }
 
     private void atualizarTask() {
