@@ -5,10 +5,7 @@ import br.com.task.manager.controller.UsuarioController;
 import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.model.Enum.TaskPriorityEnum;
 import br.com.task.manager.model.Task;
-import br.com.task.manager.strategy.SortByCompletionStatus;
-import br.com.task.manager.strategy.SortByCreationDate;
-import br.com.task.manager.strategy.SortByPriority;
-import br.com.task.manager.strategy.TaskSortingStrategy;
+import br.com.task.manager.strategy.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -120,7 +117,8 @@ public class TaskView {
                 System.out.println("1. Ordenar por prioridade");
                 System.out.println("2. Ordenar por status de conclusão");
                 System.out.println("3. Ordenar por data de criação");
-                System.out.println("4. Voltar");
+                System.out.println("4. Ordenar por título");
+                System.out.println("5. Voltar");
                 System.out.print("Escolha uma opção: ");
                 sortOption = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
@@ -179,6 +177,7 @@ public class TaskView {
             case 1 -> new SortByPriority();
             case 2 -> new SortByCompletionStatus();
             case 3 -> new SortByCreationDate();
+            case 4 -> new SortByTitle();
             default -> {
                 System.out.println("Opção inválida. Usando a ordenação padrão por data de criação.");
                 yield new SortByCreationDate();
