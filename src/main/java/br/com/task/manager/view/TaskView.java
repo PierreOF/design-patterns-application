@@ -125,9 +125,9 @@ public class TaskView {
                 System.out.println("Opção inválida.\n");
                 continue;
             }
-        } while (sortOption < 1 || sortOption > 4);
+        } while (sortOption < 1 || sortOption > 5);
 
-        if (sortOption == 4) {
+        if (sortOption == 5) {
             return;
         }
 
