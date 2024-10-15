@@ -48,7 +48,7 @@ public class TaskDAO implements TaskProxyDAOInterface {
             stmt.setString(3, task.getStatus().getDescription());
             stmt.setString(4, task.getPriority().getDescription());
             stmt.setInt(5, task.getId());
-            stmt.execute();
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
