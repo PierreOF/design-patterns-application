@@ -2,6 +2,7 @@ package br.com.task.manager.view;
 
 import br.com.task.manager.controller.TaskController;
 import br.com.task.manager.controller.UsuarioController;
+import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.TasksProxy;
 import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
@@ -19,7 +20,7 @@ public class UsuarioView {
     private final TaskProxyDAOInterface taskProxyDAO;
     private final TaskNotifier taskNotifier;
 
-    public UsuarioView(Connection connection, TaskProxyDAOInterface taskProxyDAO, UsuarioProxyDAOInterface usuarioProxyDAO, TaskNotifier taskNotifier, EmailService emailService) {
+    public UsuarioView(Connection connection, TaskNotifier taskNotifier, EmailService emailService) {
         this.usuarioController = new UsuarioController(connection, taskNotifier, emailService);
         this.scanner = new Scanner(System.in);
         this.taskProxyDAO = new TasksProxy(connection);
@@ -34,7 +35,12 @@ public class UsuarioView {
             System.out.println("2. Cadastrar novo usuário");
             System.out.println("3. Sair");
             System.out.print("Escolha uma opção: ");
-            opcao = Integer.parseInt(scanner.nextLine());
+            try {
+                opcao = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Opção inválida.\n");
+                continue;
+            }
 
             switch (opcao) {
                 case 1:
@@ -80,12 +86,12 @@ public class UsuarioView {
         System.out.print("Senha: ");
         String senha = scanner.nextLine();
 
-        boolean sucesso = usuarioController.register(nome, email, senha);
+        ResultValidationEnum resultValidation = usuarioController.register(nome, email, senha);
 
-        if (sucesso) {
+        if (resultValidation == ResultValidationEnum.APPROVED) {
             System.out.println("Usuário cadastrado com sucesso!");
-        } else {
-            System.out.println("Erro: Email já cadastrado.");
+            return;
         }
+        System.out.println("Erro ao cadastrar usuário.");
     }
 }
