@@ -1,6 +1,6 @@
 package br.com.task.manager.observer;
 
-import br.com.task.manager.email.EmailService;
+import br.com.task.manager.observer.email.EmailService;
 import br.com.task.manager.model.Usuario;
 
 public class UsuarioTaskObserver implements TaskObserver {

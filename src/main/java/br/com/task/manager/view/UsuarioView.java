@@ -5,8 +5,7 @@ import br.com.task.manager.controller.UsuarioController;
 import br.com.task.manager.controller.validation.ResultValidationEnum;
 import br.com.task.manager.db.proxy.TaskProxyDAOInterface;
 import br.com.task.manager.db.proxy.TasksProxy;
-import br.com.task.manager.db.proxy.UsuarioProxyDAOInterface;
-import br.com.task.manager.email.EmailService;
+import br.com.task.manager.observer.email.EmailService;
 import br.com.task.manager.model.Usuario;
 import br.com.task.manager.observer.TaskNotifier;
 
