@@ -148,7 +148,6 @@ public class TaskView {
     private void addNewTask() {
         Task newTask = getNewTaskDetails();
         taskController.addTask(newTask);
-        System.out.println("Tarefa adicionada com sucesso!");
     }
 
     private void deleteTask() {
