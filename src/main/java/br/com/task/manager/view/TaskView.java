@@ -154,7 +154,6 @@ public class TaskView {
     private void deleteTask() {
         int taskId = getTaskIdForUse();
         taskController.deleteTask(taskId);
-        System.out.println("Tarefa deletada com sucesso!");
     }
 
     private Task getNewTaskDetails() {
