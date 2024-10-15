@@ -123,7 +123,6 @@ public class TaskView {
                 sortOption = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 System.out.println("Opção inválida.\n");
-                continue;
             }
         } while (sortOption < 1 || sortOption > 5);
 
