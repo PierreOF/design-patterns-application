@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UsuarioProxyDAOInterface {
     Usuario userLogin(String email, String senha);
-    void insertUser(Usuario usuario);
+    Usuario insertUser(Usuario usuario);
     void updateUser(Usuario usuario);
     void deleteUser(int id);
     List<Usuario> getAllUsuarios();
