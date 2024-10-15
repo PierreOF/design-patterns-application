@@ -44,21 +44,23 @@ public class UsuarioController {
         return usuario;
     }
 
-    public boolean register(String nome, String email, String senha) {
-        ResultValidationEnum resultValidationEnum = emailAlreadyExists(email);
-        if (resultValidationEnum == ResultValidationEnum.REJECTED) {
-            return false;
-        }
-        Usuario novoUsuario = new Usuario(nome, email, senha);
-        ResultValidationEnum resultValidation = userInterfaceValidation.validateUser(novoUsuario);
+    public ResultValidationEnum register(String nome, String email, String senha) {
+        ResultValidationEnum resultValidation = emailAlreadyExists(email);
         if (resultValidation == ResultValidationEnum.REJECTED) {
-            return false;
+            return resultValidation;
         }
+
+        Usuario novoUsuario = new Usuario(nome, email, senha);
+        resultValidation = userInterfaceValidation.validateUser(novoUsuario);
+        if (resultValidation == ResultValidationEnum.REJECTED) {
+            return resultValidation;
+        }
+
         usuarioProxy.insertUser(novoUsuario);
         System.out.println("Enviando email...");
         emailService.sendEmail(email, "Conta criada com sucesso", "Parabéns sua conta foi criado com sucesso!");
         System.out.println("Email enviado com sucesso!");
-        return true;
+        return ResultValidationEnum.APPROVED;
     }
 
     private ResultValidationEnum emailAlreadyExists(String email) {
