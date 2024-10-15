@@ -36,9 +36,6 @@ public class UsuarioProxy implements UsuarioProxyDAOInterface {
     public Usuario insertUser(Usuario usuario) {
         usuario = usuarioDAO.insertUser(usuario);
         usuarioCache.put(usuario.getId(), usuario);
-        for (Usuario user : usuarioCache.values()) {
-            System.out.println(user);
-        }
         return usuario;
     }
 
