@@ -126,10 +126,9 @@ public class TaskDAO implements TaskProxyDAOInterface {
                 String descricao = rs.getString("description");
                 String status = rs.getString("status");
                 String priority = rs.getString("priority");
-                boolean completed = rs.getBoolean("completed");
                 LocalDateTime creationDate = rs.getTimestamp("creation_date").toLocalDateTime();
                 int idUsuario = rs.getInt("user_id");
-                return new Task(id, titulo, descricao, TaskStatusEnum.valueOf(status), TaskPriorityEnum.valueOf(priority), creationDate, idUsuario);
+                return new Task(id, titulo, descricao, TaskStatusEnum.fromDescription(status), TaskPriorityEnum.fromDescription(priority), creationDate, idUsuario);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
