@@ -46,6 +46,10 @@ public class TaskController {
 
     public Task getTaskById(int taskId) {
         Task task = database.getTaskById(taskId);
+
+        if (task == null) {
+            return null;
+        }
         ResultValidationEnum result = taskValidation.validateTask(task);
         if (result == ResultValidationEnum.REJECTED) {
             return null;
@@ -53,13 +57,15 @@ public class TaskController {
         return task;
     }
 
-    public void deleteTask(int taskId) {
-        if (getTaskById(taskId) != null) {
+    public ResultValidationEnum deleteTask(int taskId) {
+        Task task = getTaskById(taskId);
+        if (task != null) {
             database.deleteTaskById(taskId);
-            taskNotifier.notifyObservers("Task com ID: " + taskId + " deletado");
-            return;
+            taskNotifier.notifyObservers("Task com ID: " + taskId + " deletada");
+            return ResultValidationEnum.APPROVED;
         }
-        System.out.println("Task nao encontrado");
+        System.out.println("Task não encontrada para o ID: " + taskId + ". Não é possível deletar.");
+        return ResultValidationEnum.REJECTED;
     }
 
     public List<Task> getAllTasks(int userId, TaskSortingStrategy sortingStrategy) {
