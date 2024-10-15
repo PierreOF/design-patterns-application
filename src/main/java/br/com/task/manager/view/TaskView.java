@@ -9,6 +9,7 @@ import br.com.task.manager.strategy.SortByCreationDate;
 import br.com.task.manager.strategy.SortByPriority;
 import br.com.task.manager.strategy.TaskSortingStrategy;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -76,6 +77,7 @@ public class TaskView {
         }
         showTask(task);
         task = setNewDataToTask(task);
+        task.setId(taskId);
         ResultValidationEnum resultValidation = taskController.updateTask(task);
         if (resultValidation == ResultValidationEnum.REJECTED) {
             System.out.println("Erro ao atualizar a tarefa.");
@@ -98,13 +100,16 @@ public class TaskView {
     }
 
     private void showTask(Task task) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy | HH:mm");
+        String formattedDate = task.getCreationDate().format(formatter);
+
         System.out.println("---- Detalhes da Task ----");
         System.out.println("ID: " + task.getId());
         System.out.println("Titulo: " + task.getTitulo());
         System.out.println("Descrição: " + task.getDescricao());
         System.out.println("Status: " + task.getStatus());
         System.out.println("Prioridade: " + task.getPriority());
-        System.out.println("Data de criação: " + task.getCreationDate());
+        System.out.println("Data de criação: " + formattedDate);
         System.out.println("--------------------------");
     }
 
