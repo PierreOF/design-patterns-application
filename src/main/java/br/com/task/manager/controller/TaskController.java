@@ -54,8 +54,12 @@ public class TaskController {
     }
 
     public void deleteTask(int taskId) {
-        database.deleteTaskById(taskId);
-        taskNotifier.notifyObservers("Task com ID: " + taskId + " deletado");
+        if (getTaskById(taskId) != null) {
+            database.deleteTaskById(taskId);
+            taskNotifier.notifyObservers("Task com ID: " + taskId + " deletado");
+            return;
+        }
+        System.out.println("Task nao encontrado");
     }
 
     public List<Task> getAllTasks(int userId, TaskSortingStrategy sortingStrategy) {
