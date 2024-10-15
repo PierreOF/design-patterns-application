@@ -36,16 +36,26 @@ public class UsuarioDAO implements UsuarioProxyDAOInterface {
         return null;
     }
 
-    public void insertUser(Usuario usuario) {
+    public Usuario insertUser(Usuario usuario) {
         String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getSenha());
-            stmt.execute();
+            stmt.executeUpdate();
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    usuario.setId(generatedId);
+                } else {
+                    throw new SQLException("Falha ao inserir o usuário, nenhum ID obtido.");
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return usuario;
     }
 
     public void updateUser(Usuario usuario) {

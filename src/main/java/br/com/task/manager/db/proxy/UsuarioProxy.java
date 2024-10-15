@@ -33,9 +33,13 @@ public class UsuarioProxy implements UsuarioProxyDAOInterface {
     }
 
     @Override
-    public void insertUser(Usuario usuario) {
-        usuarioDAO.insertUser(usuario);
+    public Usuario insertUser(Usuario usuario) {
+        usuario = usuarioDAO.insertUser(usuario);
         usuarioCache.put(usuario.getId(), usuario);
+        for (Usuario user : usuarioCache.values()) {
+            System.out.println(user);
+        }
+        return usuario;
     }
 
     @Override
